@@ -34,6 +34,7 @@ const HamburgerIcon = ({ open }: { open: boolean }) => (
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,8 +48,18 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 24);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="navbar-shell" ref={ref}>
+    <div className="navbar-shell" ref={ref} data-scrolled={scrolled}>
       <nav className="navbar" aria-label="Primary navigation">
         <div className="navbar__brand">
           <Image
