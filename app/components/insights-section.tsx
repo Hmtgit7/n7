@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import n7Gradient from "@/assets/svg/n7-gradient.svg";
+import squareMark from "@/assets/svg/square.svg";
 
 const insightPosts = [
   {
@@ -47,6 +49,57 @@ const caseStudies = [
     company: "ArtVenue",
   },
 ];
+
+const footerAddresses = [
+  {
+    city: "London",
+    address:
+      "Linktia Infosystems Ltd - CB7, 26 Main Road Sundridge, TN14 6EP, England, United Kingdom.",
+  },
+  {
+    city: "Dubai",
+    address:
+      "Linktia Infosystems Ltd - CB7, Jumeirah Business, Center 5 Cluster W, Jumeirah Lakes Towers, Dubai, United Arab Emirates",
+  },
+  {
+    city: "London",
+    address:
+      "Linktia Infosystems Ltd - CB7, Nirmal, Anand Nagar, Suncity Road, Pune, Maharashtra, 411041, India",
+  },
+];
+
+const footerGroups = [
+  {
+    title: "Solutions",
+    links: [
+      "Core Banking CB7",
+      "Digital Banking N7",
+      "Open Banking",
+      "Loan Origination System",
+      "Loan Management System",
+      "Digital Transformation",
+    ],
+  },
+  {
+    title: "N7 Banking",
+    links: [
+      "About Us",
+      "Solutions",
+      "Contact",
+      "Company",
+      "Careers",
+      "Insights",
+      "Core Team",
+      "Brand Center",
+    ],
+  },
+  {
+    title: "Our Socials",
+    links: ["LinkedIn", "X"],
+  },
+];
+
+type CasePosition = "previous" | "active" | "next" | "hidden";
 
 function ArrowIcon() {
   return (
@@ -99,10 +152,10 @@ function InsightCard({ post }: { post: (typeof insightPosts)[number] }) {
       {post.featured ? (
         <div className="insight-card__media" aria-hidden="true">
           <Image
-            src="/assets/squares.png"
+            src={squareMark}
             alt=""
-            width={430}
-            height={430}
+            width={295}
+            height={267}
             sizes="(max-width: 767px) 80vw, 320px"
           />
         </div>
@@ -131,16 +184,16 @@ function CaseStudyCard({
   position,
 }: {
   study: (typeof caseStudies)[number];
-  position: "previous" | "active" | "next";
+  position: CasePosition;
 }) {
   return (
     <article className={`case-card case-card--${position}`} aria-hidden={position !== "active"}>
       <div className="case-card__media" aria-hidden="true">
         <Image
-          src="/assets/squares.png"
+          src={squareMark}
           alt=""
-          width={430}
-          height={430}
+          width={295}
+          height={267}
           sizes="(max-width: 767px) 86vw, 420px"
         />
       </div>
@@ -160,6 +213,63 @@ function CaseStudyCard({
   );
 }
 
+function FooterLink({ label }: { label: string }) {
+  return (
+    <a className="footer-section__link" href="#footer-link">
+      <span>{label}</span>
+      <ArrowIcon />
+    </a>
+  );
+}
+
+function FooterSection() {
+  return (
+    <footer className="footer-section" aria-labelledby="footer-title">
+      <div className="footer-section__glow" aria-hidden="true" />
+
+      <h2 id="footer-title" className="sr-only">
+        N7 contact and site links
+      </h2>
+
+      <div className="footer-section__inner">
+        <div className="footer-section__brand" aria-hidden="true">
+          <Image
+            src={n7Gradient}
+            alt=""
+            width={440}
+            height={233}
+            sizes="(max-width: 767px) 80vw, 32vw"
+          />
+        </div>
+
+        {footerAddresses.map((item) => (
+          <address className="footer-section__address" key={`${item.city}-${item.address}`}>
+            <strong>{item.city}</strong>
+            <span>{item.address}</span>
+          </address>
+        ))}
+
+        <div className="footer-section__spacer" aria-hidden="true" />
+
+        {footerGroups.map((group) => (
+          <nav className="footer-section__group" key={group.title} aria-label={group.title}>
+            <h3>{group.title}</h3>
+            {group.links.map((link) => (
+              <FooterLink label={link} key={link} />
+            ))}
+          </nav>
+        ))}
+
+        <p className="footer-section__copyright">
+          Copyright © 2022 by Linktia Infosystems Limited — [CB7 and N7 as Commercial Brand] —
+          [Registered under the Companies Act 2006 in England and Wales | Number of Incorporation
+          13100992]
+        </p>
+      </div>
+    </footer>
+  );
+}
+
 export function InsightsSection() {
   const [caseIndex, setCaseIndex] = useState(0);
 
@@ -167,11 +277,14 @@ export function InsightsSection() {
     setCaseIndex((index + caseStudies.length) % caseStudies.length);
   };
 
-  const visibleCases = [
-    { position: "previous" as const, index: caseIndex - 1 },
-    { position: "active" as const, index: caseIndex },
-    { position: "next" as const, index: caseIndex + 1 },
-  ];
+  const getCasePosition = (index: number): CasePosition => {
+    const offset = (index - caseIndex + caseStudies.length) % caseStudies.length;
+
+    if (offset === 0) return "active";
+    if (offset === 1) return "next";
+    if (offset === caseStudies.length - 1) return "previous";
+    return "hidden";
+  };
 
   return (
     <>
@@ -207,16 +320,9 @@ export function InsightsSection() {
         <h2 id="case-studies-title">Our Case Studies</h2>
 
         <div className="case-studies__carousel" aria-live="polite">
-          {visibleCases.map((item) => {
-            const normalizedIndex = (item.index + caseStudies.length) % caseStudies.length;
-            return (
-              <CaseStudyCard
-                key={`${item.position}-${normalizedIndex}`}
-                study={caseStudies[normalizedIndex]}
-                position={item.position}
-              />
-            );
-          })}
+          {caseStudies.map((study, index) => (
+            <CaseStudyCard study={study} position={getCasePosition(index)} key={study.company} />
+          ))}
         </div>
 
         <div className="case-studies__controls">
@@ -284,6 +390,8 @@ export function InsightsSection() {
           </a>
         </div>
       </section>
+
+      <FooterSection />
     </>
   );
 }
