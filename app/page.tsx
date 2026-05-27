@@ -1,9 +1,11 @@
-import { Navbar } from "./components/navbar";
+import { HeroSection } from "./components/hero-section";
+import { SolutionsSection } from "./components/solutions-section";
 
 export default function Home() {
   return (
-    <main className="home-shell">
-      <Navbar />
-    </main>
+    <>
+      <HeroSection />
+      <SolutionsSection />
+    </>
   );
 }
