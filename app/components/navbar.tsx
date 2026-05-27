@@ -1,93 +1,135 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
-const navLinks = [
-  { label: "solutions", hasMenu: true },
-  { label: "resources", hasMenu: true },
-  { label: "About us", hasMenu: false },
-];
+const NavChevron = () => (
+  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+    <path
+      d="M2 3.5L5 6.5L8 3.5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-function NavChevron() {
-  return (
-    <svg className="nav-chevron" viewBox="0 0 14 14" aria-hidden="true">
-      <path d="M3.2 5.1 7 8.9l3.8-3.8" />
-    </svg>
-  );
-}
-
-function MenuIcon({ open }: { open: boolean }) {
-  return (
-    <svg className="nav-menu-icon" viewBox="0 0 20 20" aria-hidden="true">
-      {open ? (
-        <>
-          <path d="M5 5 15 15" />
-          <path d="M15 5 5 15" />
-        </>
-      ) : (
-        <>
-          <path d="M4 6h12" />
-          <path d="M4 10h12" />
-          <path d="M4 14h12" />
-        </>
-      )}
-    </svg>
-  );
-}
+const HamburgerIcon = ({ open }: { open: boolean }) => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    {open ? (
+      <>
+        <path d="M4 4L16 16" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M16 4L4 16" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      </>
+    ) : (
+      <>
+        <path d="M3 5H17" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M3 10H17" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M3 15H17" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      </>
+    )}
+  </svg>
+);
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
-    <header className="site-header">
-      <nav className="site-nav" aria-label="Primary navigation">
-        <Link className="site-nav__brand" href="/" aria-label="N7 home">
-          N7
-        </Link>
+    <div className="relative z-10 flex justify-center px-4 pt-5 pb-0 md:px-8">
+      <div className="w-full max-w-[900px]" ref={ref}>
+        <nav
+          className="flex w-full items-center justify-between rounded-[14px] border border-white/[0.07] px-3 py-2 font-normal md:py-3"
+          style={{
+            background: "rgba(47,47,47,0.698)",
+            fontFamily: "'Chivo Mono', monospace",
+          }}
+        >
+          <span className="select-none text-[18px] font-bold tracking-normal text-white">N7</span>
 
-        <div className="site-nav__content">
-          <div className="site-nav__links">
-            {navLinks.map((item) => (
-              <a className="site-nav__link" href="#" key={item.label}>
-                <span>{item.label}</span>
-                {item.hasMenu ? <NavChevron /> : null}
-              </a>
+          <div className="hidden items-center gap-9 md:flex">
+            {["Solutions", "Resources"].map((item) => (
+              <button
+                key={item}
+                type="button"
+                className="flex items-center gap-1.5 text-[11px] tracking-[0.16em] text-white uppercase transition-colors hover:text-white/70"
+              >
+                {item}
+                <NavChevron />
+              </button>
             ))}
+            <button
+              type="button"
+              className="text-[11px] tracking-[0.16em] text-white uppercase transition-colors hover:text-white/70"
+            >
+              About Us
+            </button>
           </div>
 
-          <div className="site-nav__actions">
-            <a className="site-nav__contact" href="#contact">
-              Contact Us
-            </a>
-            <a className="site-nav__demo" href="#request-demo">
-              request demo
-            </a>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="px-4 py-2 text-[10px] tracking-[0.16em] text-white uppercase transition-all hover:bg-white/5 md:px-6 md:py-2.5 md:text-[11px]"
+              style={{ border: "1px solid rgba(255,255,255,0.3)", borderRadius: 8 }}
+            >
+              Request Demo
+            </button>
+
+            <button
+              className="rounded-lg p-1.5 transition-all hover:bg-white/5 md:hidden"
+              type="button"
+              onClick={() => setOpen(!open)}
+              aria-label="Toggle menu"
+              aria-expanded={open}
+            >
+              <HamburgerIcon open={open} />
+            </button>
+          </div>
+        </nav>
+
+        <div
+          className="overflow-hidden transition-all duration-300 ease-in-out md:hidden"
+          style={{ maxHeight: open ? 200 : 0, opacity: open ? 1 : 0 }}
+        >
+          <div
+            className="mt-1 flex flex-col gap-3 rounded-[14px] border border-white/[0.07] px-4 py-3"
+            style={{
+              background: "rgba(47,47,47,0.95)",
+              fontFamily: "'Chivo Mono', monospace",
+              transform: open ? "translateY(0)" : "translateY(-8px)",
+              transition: "transform 0.3s ease",
+            }}
+          >
+            {["Solutions", "Resources"].map((item) => (
+              <button
+                key={item}
+                type="button"
+                className="flex items-center gap-1.5 text-left text-[11px] tracking-[0.16em] text-white uppercase transition-colors hover:text-white/70"
+              >
+                {item}
+                <NavChevron />
+              </button>
+            ))}
+            <button
+              type="button"
+              className="text-left text-[11px] tracking-[0.16em] text-white uppercase transition-colors hover:text-white/70"
+            >
+              About Us
+            </button>
           </div>
         </div>
-
-        <button
-          className="site-nav__toggle"
-          type="button"
-          aria-label="Toggle navigation menu"
-          aria-expanded={open}
-          onClick={() => setOpen((current) => !current)}
-        >
-          <MenuIcon open={open} />
-        </button>
-      </nav>
-
-      <div className="site-nav__mobile-panel" data-open={open}>
-        {navLinks.map((item) => (
-          <a className="site-nav__mobile-link" href="#" key={item.label}>
-            <span>{item.label}</span>
-            {item.hasMenu ? <NavChevron /> : null}
-          </a>
-        ))}
-        <a className="site-nav__mobile-demo" href="#request-demo">
-          request demo
-        </a>
       </div>
-    </header>
+    </div>
   );
 }
