@@ -50,7 +50,7 @@ export function CoreBankingSection() {
           CB7
         </div>
 
-        <div className="core-banking-section__copy">
+        <div className="core-banking-section__copy" data-reveal="fade-right">
           <h2 id="core-banking-title">A complete cloud-based core banking.</h2>
           <p>Faster time to market with our cloud-based core banking services</p>
           <a className="core-banking-section__button" href="#request-demo">
@@ -62,7 +62,12 @@ export function CoreBankingSection() {
           </a>
         </div>
 
-        <div className="core-banking-section__dashboard" aria-hidden="true">
+        <div
+          className="core-banking-section__dashboard"
+          aria-hidden="true"
+          data-reveal="fade-left"
+          data-parallax="-0.05"
+        >
           <Image
             src="/assets/svg/dashboard.svg"
             alt=""
@@ -74,7 +79,12 @@ export function CoreBankingSection() {
       </section>
 
       <section className="core-features-section" aria-labelledby="core-features-title">
-        <div className="core-features-section__dashboard" aria-hidden="true">
+        <div
+          className="core-features-section__dashboard"
+          aria-hidden="true"
+          data-reveal="fade-right"
+          data-parallax="0.04"
+        >
           <Image
             src="/assets/svg/dashboard-2.svg"
             alt=""
@@ -84,7 +94,7 @@ export function CoreBankingSection() {
           />
         </div>
 
-        <div className="core-features-section__content">
+        <div className="core-features-section__content" data-reveal="fade-left">
           <h2 id="core-features-title">
             Run a more efficient, flexible, and digitally connected corebanking system
           </h2>
@@ -101,7 +111,7 @@ export function CoreBankingSection() {
       </section>
 
       <section className="core-cta-section" aria-labelledby="core-cta-title">
-        <div className="core-cta-section__card">
+        <div className="core-cta-section__card" data-reveal="scale">
           <div className="core-cta-section__ghost" aria-hidden="true">
             CB7
           </div>

@@ -16,7 +16,7 @@ export function HeroSection() {
       <Navbar />
       <div className="hero-glow" aria-hidden="true" />
 
-      <div className="hero-copy">
+      <div className="hero-copy" data-reveal="fade-right">
         <div className="hero-text">
           <h1 id="hero-title">The new foundation of modern banking</h1>
           <p>
@@ -35,7 +35,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      <div className="hero-visual" aria-hidden="true">
+      <div className="hero-visual" aria-hidden="true" data-reveal="scale" data-parallax="-0.06">
         <Image
           src="/assets/svg/hero-banking.svg"
           alt=""
@@ -46,7 +46,7 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="trusted-row" aria-label="Trusted by">
+      <div className="trusted-row" aria-label="Trusted by" data-reveal="fade-up">
         <p>trusted by:</p>
         <div className="trusted-row__logos">
           {trustedLogos.map((logo) => (

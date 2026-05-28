@@ -61,7 +61,7 @@ function ArrowIcon() {
 export function SolutionsSection() {
   return (
     <section className="solutions-section" aria-labelledby="solutions-title">
-      <div className="solutions-section__intro">
+      <div className="solutions-section__intro" data-reveal="fade-right">
         <h2 id="solutions-title">All of our solutions are tailor-made to your needs</h2>
         <a className="solutions-section__button" href="#request-demo">
           REQUEST DEMO
@@ -69,8 +69,13 @@ export function SolutionsSection() {
       </div>
 
       <div className="solutions-grid">
-        {solutions.map((solution) => (
-          <article className="solution-card" key={solution.title}>
+        {solutions.map((solution, index) => (
+          <article
+            className="solution-card"
+            key={solution.title}
+            data-reveal="fade-up"
+            style={{ "--reveal-delay": `${index * 90}ms` } as CSSProperties}
+          >
             <div className="solution-card__top">
               <GradientIcon src={solution.icon} title={solution.title} />
               {solution.badge ? (

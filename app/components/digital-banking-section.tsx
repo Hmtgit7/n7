@@ -127,7 +127,7 @@ export function DigitalBankingSection() {
           7
         </div>
 
-        <div className="digital-intro">
+        <div className="digital-intro" data-reveal="fade-right">
           <h2 id="digital-banking-title">Digital banking out-of-the-box</h2>
           <p>
             N7 helps your financial institution improve the client experience, automate and optimize
@@ -142,11 +142,16 @@ export function DigitalBankingSection() {
           </a>
         </div>
 
-        <div className="digital-phone digital-phone--one" aria-hidden="true">
+        <div
+          className="digital-phone digital-phone--one"
+          aria-hidden="true"
+          data-reveal="scale"
+          data-parallax="-0.07"
+        >
           <Image src="/assets/svg/mob-1.svg" alt="" width={265} height={520} priority />
         </div>
 
-        <article className="digital-copy digital-copy--one">
+        <article className="digital-copy digital-copy--one" data-reveal="fade-left">
           <h3>Fully compliant with regulatory requirement</h3>
           <p>
             The governance of risk management with regulations is achieved by our risk management
@@ -156,7 +161,7 @@ export function DigitalBankingSection() {
           <FeatureList items={firstFeatures} />
         </article>
 
-        <article className="digital-copy digital-copy--two">
+        <article className="digital-copy digital-copy--two" data-reveal="fade-right">
           <h3>No legacy IT systems</h3>
           <p>
             Our Digital Banking solution and multilayered approach help financial institutions take
@@ -166,15 +171,25 @@ export function DigitalBankingSection() {
           <FeatureList items={secondFeatures} />
         </article>
 
-        <div className="digital-phone digital-phone--two" aria-hidden="true">
+        <div
+          className="digital-phone digital-phone--two"
+          aria-hidden="true"
+          data-reveal="scale"
+          data-parallax="0.06"
+        >
           <Image src="/assets/svg/mob-2.svg" alt="" width={265} height={520} />
         </div>
 
-        <div className="digital-phone digital-phone--three" aria-hidden="true">
+        <div
+          className="digital-phone digital-phone--three"
+          aria-hidden="true"
+          data-reveal="scale"
+          data-parallax="-0.05"
+        >
           <Image src="/assets/svg/mob-3.svg" alt="" width={265} height={520} />
         </div>
 
-        <article className="digital-copy digital-copy--three">
+        <article className="digital-copy digital-copy--three" data-reveal="fade-left">
           <h3>No traditional branches</h3>
           <p>
             Our Digital Banking out-of-the-box helps you to accelerate innovation while reducing
@@ -183,7 +198,7 @@ export function DigitalBankingSection() {
           <FeatureList items={thirdFeatures} />
         </article>
 
-        <div className="digital-cta">
+        <div className="digital-cta" data-reveal="scale">
           <div className="digital-cta__ghost" aria-hidden="true">
             N7
           </div>

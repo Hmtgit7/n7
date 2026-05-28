@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import Image from "next/image";
 import n7Gradient from "@/assets/svg/n7-gradient.svg";
 import squareMark from "@/assets/svg/square.svg";
@@ -232,7 +232,7 @@ function FooterSection() {
       </h2>
 
       <div className="footer-section__inner">
-        <div className="footer-section__brand" aria-hidden="true">
+        <div className="footer-section__brand" aria-hidden="true" data-reveal="fade-right">
           <Image
             src={n7Gradient}
             alt=""
@@ -242,8 +242,13 @@ function FooterSection() {
           />
         </div>
 
-        {footerAddresses.map((item) => (
-          <address className="footer-section__address" key={`${item.city}-${item.address}`}>
+        {footerAddresses.map((item, index) => (
+          <address
+            className="footer-section__address"
+            key={`${item.city}-${item.address}`}
+            data-reveal="fade-up"
+            style={{ "--reveal-delay": `${index * 80}ms` } as CSSProperties}
+          >
             <strong>{item.city}</strong>
             <span>{item.address}</span>
           </address>
@@ -251,8 +256,14 @@ function FooterSection() {
 
         <div className="footer-section__spacer" aria-hidden="true" />
 
-        {footerGroups.map((group) => (
-          <nav className="footer-section__group" key={group.title} aria-label={group.title}>
+        {footerGroups.map((group, index) => (
+          <nav
+            className="footer-section__group"
+            key={group.title}
+            aria-label={group.title}
+            data-reveal="fade-up"
+            style={{ "--reveal-delay": `${(index + 3) * 80}ms` } as CSSProperties}
+          >
             <h3>{group.title}</h3>
             {group.links.map((link) => (
               <FooterLink label={link} key={link} />
@@ -272,6 +283,7 @@ function FooterSection() {
 
 export function InsightsSection() {
   const [caseIndex, setCaseIndex] = useState(0);
+  const [isCasePaused, setIsCasePaused] = useState(false);
 
   const goToCase = (index: number) => {
     setCaseIndex((index + caseStudies.length) % caseStudies.length);
@@ -286,10 +298,20 @@ export function InsightsSection() {
     return "hidden";
   };
 
+  useEffect(() => {
+    if (isCasePaused) return;
+
+    const interval = window.setInterval(() => {
+      setCaseIndex((current) => (current + 1) % caseStudies.length);
+    }, 5200);
+
+    return () => window.clearInterval(interval);
+  }, [isCasePaused]);
+
   return (
     <>
       <section className="insights-section" aria-labelledby="insights-title">
-        <div className="insights-section__intro">
+        <div className="insights-section__intro" data-reveal="fade-right">
           <div className="insights-section__glow" aria-hidden="true" />
           <h2 id="insights-title">
             Get yourself up-to-speed on all the things happening in fintech
@@ -300,11 +322,19 @@ export function InsightsSection() {
         </div>
 
         <div className="insights-section__grid">
-          <InsightCard post={insightPosts[0]} />
+          <div data-reveal="fade-up">
+            <InsightCard post={insightPosts[0]} />
+          </div>
 
           <div className="insights-section__small-grid">
             {insightPosts.slice(1).map((post, index) => (
-              <InsightCard post={post} key={`${post.title}-${index}`} />
+              <div
+                key={`${post.title}-${index}`}
+                data-reveal="fade-up"
+                style={{ "--reveal-delay": `${(index + 1) * 100}ms` } as CSSProperties}
+              >
+                <InsightCard post={post} />
+              </div>
             ))}
           </div>
 
@@ -317,9 +347,29 @@ export function InsightsSection() {
       </section>
 
       <section className="case-studies-section" aria-labelledby="case-studies-title">
-        <h2 id="case-studies-title">Our Case Studies</h2>
+        <h2 id="case-studies-title" data-reveal="fade-up">
+          Our Case Studies
+        </h2>
 
-        <div className="case-studies__carousel" aria-live="polite">
+        <div
+          className="case-studies__carousel"
+          aria-live="polite"
+          data-reveal="scale"
+          tabIndex={0}
+          onMouseEnter={() => setIsCasePaused(true)}
+          onMouseLeave={() => setIsCasePaused(false)}
+          onFocus={() => setIsCasePaused(true)}
+          onBlur={() => setIsCasePaused(false)}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowLeft") {
+              goToCase(caseIndex - 1);
+            }
+
+            if (event.key === "ArrowRight") {
+              goToCase(caseIndex + 1);
+            }
+          }}
+        >
           {caseStudies.map((study, index) => (
             <CaseStudyCard study={study} position={getCasePosition(index)} key={study.company} />
           ))}
@@ -366,7 +416,11 @@ export function InsightsSection() {
         </div>
       </section>
 
-      <section className="paperless-cta-section" aria-labelledby="paperless-cta-title">
+      <section
+        className="paperless-cta-section"
+        aria-labelledby="paperless-cta-title"
+        data-reveal="scale"
+      >
         <div className="paperless-cta-section__copy">
           <h2 id="paperless-cta-title">Take the full advantage of going paper-less now.</h2>
           <p>
